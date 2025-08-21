@@ -579,3 +579,5 @@ export function useContestParticipants(contestId: string, page: number = 1, limi
     enabled: !!contestId,
   })
 } 
+
+export { Award, Contest }

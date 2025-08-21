@@ -68,14 +68,6 @@ export function ContestParticipants() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <Link to={`/competitions/$slug`} params={{ slug: contestData?.slug || "" }}>
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Contest
-            </Button>
-          </Link>
-        </div>
 
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>

@@ -60,6 +60,9 @@ export function CompetitionsPage() {
   const allContests = [...(activeContestsData?.data || []), ...(upcomingContestsData?.data || []), ...(endedContestsData?.data || [])];
   const joinedContests = joinedContestsData?.data || [];
 
+  // Sort all contests by prize pool in descending order (highest to lowest)
+  const sortedAllContests = allContests.sort((a, b) => b.prizePool - a.prizePool);
+
   // Filter contests by status and search
   const filterContestsBySearch = (contests: Contest[]) => {
     if (!debouncedSearchQuery) return contests;
@@ -69,12 +72,14 @@ export function CompetitionsPage() {
     );
   };
 
-  const activeCompetitions = filterContestsBySearch(allContests.filter((contest) => getCompetitionStatus(contest) === "active"));
-  const comingSoonCompetitions = filterContestsBySearch(allContests.filter((contest) => getCompetitionStatus(contest) === "coming-soon"));
-  const endedCompetitions = filterContestsBySearch(allContests.filter((contest) => getCompetitionStatus(contest) === "ended"));
+  const activeCompetitions = filterContestsBySearch(sortedAllContests.filter((contest) => getCompetitionStatus(contest) === "active"));
+  const comingSoonCompetitions = filterContestsBySearch(sortedAllContests.filter((contest) => getCompetitionStatus(contest) === "coming-soon"));
+  const endedCompetitions = filterContestsBySearch(sortedAllContests.filter((contest) => getCompetitionStatus(contest) === "ended"));
 
-  const joinedActiveCompetitions = joinedContests.filter((contest) => getCompetitionStatus(contest) === "active");
-  const joinedIds = new Set(joinedContests.map((c) => c.id));
+  // Sort joined contests by prize pool in descending order
+  const sortedJoinedContests = joinedContests.sort((a, b) => b.prizePool - a.prizePool);
+  const joinedActiveCompetitions = sortedJoinedContests.filter((contest) => getCompetitionStatus(contest) === "active");
+  const joinedIds = new Set(sortedJoinedContests.map((c) => c.id));
 
   // Pagination calculations
   const getCurrentTabCompetitions = () => {

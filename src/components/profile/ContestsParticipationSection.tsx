@@ -62,11 +62,15 @@ export function ContestsParticipationSection({ profile, participations, onVoteSu
   const [lightboxImage, setLightboxImage] = useState<{ url: string; caption: string } | null>(null);
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
   const [selectedParticipation, setSelectedParticipation] = useState<ContestParticipation | null>(null);
+  
+  // Sort participations by prize pool in descending order (highest to lowest)
+  const sortedParticipations = participations?.sort((a, b) => (b.contest?.prizePool || 0) - (a.contest?.prizePool || 0)) || [];
+  
   const closeLightbox = () => {
     setLightboxImage(null);
   };
 
-  if (!participations || participations.length === 0) {
+  if (!sortedParticipations || sortedParticipations.length === 0) {
     return (
       <Card className="shadow-sm border-0 bg-gradient-to-br from-gray-50 to-white">
         <CardContent className="text-center py-16 px-8">
@@ -98,7 +102,7 @@ export function ContestsParticipationSection({ profile, participations, onVoteSu
 
       {/* Participations Grid */}
       <div className="grid gap-8">
-        {participations.map((participation) => (
+        {sortedParticipations.map((participation) => (
           <Card key={participation.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-white">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row">

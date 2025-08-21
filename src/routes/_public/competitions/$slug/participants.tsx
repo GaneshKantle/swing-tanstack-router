@@ -12,15 +12,31 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { formatDistanceToNow } from "date-fns";
 import { ArrowLeft, Calendar, ChevronLeft, ChevronRight, Eye, MessageCircle, Trophy, User, Users, X } from "lucide-react";
 import { useState } from "react";
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { DashboardSection } from "@/routes/dashboard/$section";
+import Header from "@/components/layout/Header";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ContestParticipants() {
   const { slug } = Route.useParams();
   const navigate = useNavigate();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   const [selectedParticipant, setSelectedParticipant] = useState<ContestParticipant | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeSection, setActiveSection] = useState<DashboardSection>("competitions");
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const handleSidebarToggle = () => {
+    setIsMobileSidebarOpen(!isMobileSidebarOpen);
+  };
+
+  const handleSetActiveSection = (newSection: DashboardSection) => {
+    setActiveSection(newSection);
+    navigate({ to: "/dashboard/$section", params: { section: newSection } });
+  };
 
   // Use hooks to fetch data
   const { data: contestInfo, isLoading: isLoadingContest, error: contestError } = useContestBySlug(slug);
@@ -34,7 +50,7 @@ export default function ContestParticipants() {
     hasPreviousPage: false,
   };
 
-  const isLoading = isLoadingContest || isLoadingParticipants;
+  const isLoading = isLoadingContest || isLoadingParticipants || authLoading;
   const error = contestError || participantsError;
 
   const handlePageChange = (page: number) => {
@@ -101,51 +117,93 @@ export default function ContestParticipants() {
     return images;
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading contest information...</p>
+        </div>
+      </div>
+    );
+  }
 
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Error Loading Contest</h1>
+          <p className="text-muted-foreground mb-4">Failed to load contest information.</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
+      <Header onSidebarToggle={isAuthenticated ? handleSidebarToggle : undefined} />
       <div className="flex pt-16 min-h-screen">
-        <main className="flex-1 overflow-y-auto">
-          <div className="max-w-7xl mx-auto space-y-8 p-6">
-            {/* Back Navigation */}
-            <div className="flex items-center justify-between">
-              <Link to="/competitions/$slug" params={{ slug: contestInfo?.slug || "" }}>
-                <Button variant="outline" size="sm" className="flex items-center">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Competitions
-                </Button>
-              </Link>
+        {/* Desktop Sidebar - Only show when authenticated */}
+        {isAuthenticated && (
+          <aside className="hidden md:block">
+            <Sidebar activeSection={activeSection} setActiveSection={handleSetActiveSection} />
+          </aside>
+        )}
 
-              <div className="flex items-center space-x-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">{pagination.total}</div>
-                  <div className="text-sm text-muted-foreground">Total Participants</div>
-                </div>
-              </div>
+        {/* Mobile Sidebar - Only show when authenticated */}
+        {isAuthenticated && (
+          <Sidebar 
+            activeSection={activeSection} 
+            setActiveSection={handleSetActiveSection} 
+            isMobile={true} 
+            isOpen={isMobileSidebarOpen} 
+            onToggle={() => setIsMobileSidebarOpen(false)} 
+          />
+        )}
+
+        {/* Main content */}
+        <main className={`overflow-y-auto ${isAuthenticated ? 'flex-1' : 'w-full'}`}>
+          <div className="max-w-7xl mx-auto space-y-8 p-6">
+            {/* Back Button */}
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                onClick={() => navigate({ to: "/competitions/$slug", params: { slug } })}
+                className="flex items-center space-x-2 text-muted-foreground hover:text-foreground"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Competition</span>
+              </Button>
             </div>
 
             {/* Contest Info Header */}
-            <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
-              <CardContent className="p-6">
+            <Card className="border border-border shadow-sm">
+              <CardContent className="p-8">
                 <div className="flex items-center justify-between">
-                  <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-foreground">{contestInfo?.name} - Participants</h1>
-                    <p className="text-muted-foreground">{contestInfo?.description}</p>
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                      <span className="flex items-center">
-                        <Trophy className="w-4 h-4 mr-1" />
-                        Prize: ${contestInfo?.prizePool?.toLocaleString()}
+                  <div className="space-y-3">
+                    <h1 className="text-3xl font-bold text-foreground tracking-tight">{contestInfo?.name} - Participants</h1>
+                    <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">{contestInfo?.description}</p>
+                    <div className="flex items-center space-x-6 text-sm">
+                      <span className="flex items-center text-foreground">
+                        <Trophy className="w-5 h-5 mr-2 text-primary" />
+                        <span className="font-medium">Prize: ${contestInfo?.prizePool?.toLocaleString()}</span>
                       </span>
-                      <span className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        {contestInfo?.startDate && formatDate(contestInfo.startDate)} - {contestInfo?.endDate && formatDate(contestInfo.endDate)}
+                      <span className="flex items-center text-foreground">
+                        <Calendar className="w-5 h-5 mr-2 text-primary" />
+                        <span className="font-medium">
+                          {contestInfo?.startDate && formatDate(contestInfo.startDate)} - {contestInfo?.endDate && formatDate(contestInfo.endDate)}
+                        </span>
                       </span>
                     </div>
                   </div>
-                  <div className="hidden md:flex items-center space-x-2">
-                    <Users className="w-8 h-8 text-primary" />
-                    <Badge variant="outline" className="text-lg px-4 py-2">
+                  <div className="hidden md:flex items-center space-x-3">
+                    <div className="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center">
+                      <Users className="w-6 h-6 text-primary" />
+                    </div>
+                    <Badge variant="outline" className="text-base px-4 py-2 border-primary/20 text-primary">
                       {contestInfo?.status}
                     </Badge>
                   </div>

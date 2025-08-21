@@ -239,18 +239,8 @@ export function BrowseContests() {
           </p>
         </div>
         
-        {viewMode === 'models' && selectedContest && (
-          <Button 
-            variant="outline" 
-            onClick={() => {
-              setViewMode('contests');
-              setSelectedContest(null);
-            }}
-          >
-            <Eye className="w-4 h-4 mr-2" />
-            Back to Contests
-          </Button>
-        )}
+   
+        
       </div>
 
       {/* Search and Filters */}
