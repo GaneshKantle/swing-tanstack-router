@@ -580,4 +580,4 @@ export function useContestParticipants(contestId: string, page: number = 1, limi
   })
 } 
 
-export { Award, Contest }
+export type { Award, Contest }

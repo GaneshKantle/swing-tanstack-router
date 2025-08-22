@@ -6,21 +6,21 @@ const Footer = () => {
   const footerLinks = {
     "Competitions": [
       { label: "Active Competitions", href: "/competitions" },
-      { label: "How to Enter", href: "/how-to-enter" },
-      { label: "Competition Rules", href: "/rules" },
-      { label: "Past Winners", href: "/winners" }
+      // { label: "How to Enter", href: "/how-to-enter" },
+      { label: "Competition Rules", href: "../dashboard/OfficialRules.tsx" },
+      // { label: "Past Winners", href: "/winners" }
     ],
     "Support": [
-      { label: "FAQ", href: "/faq" },
-      { label: "Contact Us", href: "/contact" },
-      { label: "Technical Support", href: "/support" },
-      { label: "Guidelines", href: "/guidelines" }
+      { label: "FAQ", href: "../dashboard/Support.tsx" },
+      { label: "Contact Us", href: "../dashboard/Support.tsx" },
+      // { label: "Technical Support", href: "/support" },
+      // { label: "Guidelines", href: "/guidelines" }
     ],
     "Legal": [
       { label: "Terms of Service", href: "/terms" },
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Cookie Policy", href: "/cookies" },
-      { label: "Contest Rules", href: "/contest-rules" }
+      // { label: "Cookie Policy", href: "/cookies" },
+      // { label: "Contest Rules", href: "/contest-rules" }
     ]
   };
 
@@ -66,9 +66,10 @@ const Footer = () => {
               <div className="text-3xl font-display font-bold tracking-tight">
                 SWING
               </div>
-              <div className="text-sm text-white/60 tracking-wider">
-                Boudoir
-              </div>
+              <div className="text-1xl text-white/60 tracking-wider">
+  Boudoir
+</div>
+
             </div>
             <p className="text-white/80 mb-6 max-w-md">
               Join the most prestigious modeling competitions and win life-changing prizes. 
