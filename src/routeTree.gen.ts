@@ -36,9 +36,11 @@ import { Route as PublicFaqRouteImport } from './routes/_public/faq'
 import { Route as PublicContactRouteImport } from './routes/_public/contact'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminProfilesIndexRouteImport } from './routes/admin/profiles/index'
+import { Route as AdminNotificationsIndexRouteImport } from './routes/admin/notifications/index'
 import { Route as AdminContestsIndexRouteImport } from './routes/admin/contests/index'
 import { Route as PublicCompetitionsIndexRouteImport } from './routes/_public/competitions/index'
 import { Route as AdminProfilesIdRouteImport } from './routes/admin/profiles/$id'
+import { Route as AdminNotificationsCreateRouteImport } from './routes/admin/notifications/create'
 import { Route as AdminContestsCreateRouteImport } from './routes/admin/contests/create'
 import { Route as PublicProfileUsernameRouteImport } from './routes/_public/profile.$username'
 import { Route as PublicCompetitionsSlugRouteRouteImport } from './routes/_public/competitions/$slug/route'
@@ -181,6 +183,11 @@ const AdminProfilesIndexRoute = AdminProfilesIndexRouteImport.update({
   path: '/profiles/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNotificationsIndexRoute = AdminNotificationsIndexRouteImport.update({
+  id: '/notifications/',
+  path: '/notifications/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminContestsIndexRoute = AdminContestsIndexRouteImport.update({
   id: '/contests/',
   path: '/contests/',
@@ -196,6 +203,12 @@ const AdminProfilesIdRoute = AdminProfilesIdRouteImport.update({
   path: '/profiles/$id',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNotificationsCreateRoute =
+  AdminNotificationsCreateRouteImport.update({
+    id: '/notifications/create',
+    path: '/notifications/create',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminContestsCreateRoute = AdminContestsCreateRouteImport.update({
   id: '/contests/create',
   path: '/contests/create',
@@ -264,9 +277,11 @@ export interface FileRoutesByFullPath {
   '/competitions/$slug': typeof PublicCompetitionsSlugRouteRouteWithChildren
   '/profile/$username': typeof PublicProfileUsernameRoute
   '/admin/contests/create': typeof AdminContestsCreateRoute
+  '/admin/notifications/create': typeof AdminNotificationsCreateRoute
   '/admin/profiles/$id': typeof AdminProfilesIdRoute
   '/competitions': typeof PublicCompetitionsIndexRoute
   '/admin/contests': typeof AdminContestsIndexRoute
+  '/admin/notifications': typeof AdminNotificationsIndexRoute
   '/admin/profiles': typeof AdminProfilesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/competitions/$slug/participants': typeof PublicCompetitionsSlugParticipantsRoute
@@ -299,9 +314,11 @@ export interface FileRoutesByTo {
   '/voters': typeof VotersIndexRoute
   '/profile/$username': typeof PublicProfileUsernameRoute
   '/admin/contests/create': typeof AdminContestsCreateRoute
+  '/admin/notifications/create': typeof AdminNotificationsCreateRoute
   '/admin/profiles/$id': typeof AdminProfilesIdRoute
   '/competitions': typeof PublicCompetitionsIndexRoute
   '/admin/contests': typeof AdminContestsIndexRoute
+  '/admin/notifications': typeof AdminNotificationsIndexRoute
   '/admin/profiles': typeof AdminProfilesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/competitions/$slug/participants': typeof PublicCompetitionsSlugParticipantsRoute
@@ -339,9 +356,11 @@ export interface FileRoutesById {
   '/_public/competitions/$slug': typeof PublicCompetitionsSlugRouteRouteWithChildren
   '/_public/profile/$username': typeof PublicProfileUsernameRoute
   '/admin/contests/create': typeof AdminContestsCreateRoute
+  '/admin/notifications/create': typeof AdminNotificationsCreateRoute
   '/admin/profiles/$id': typeof AdminProfilesIdRoute
   '/_public/competitions/': typeof PublicCompetitionsIndexRoute
   '/admin/contests/': typeof AdminContestsIndexRoute
+  '/admin/notifications/': typeof AdminNotificationsIndexRoute
   '/admin/profiles/': typeof AdminProfilesIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/_public/competitions/$slug/participants': typeof PublicCompetitionsSlugParticipantsRoute
@@ -379,9 +398,11 @@ export interface FileRouteTypes {
     | '/competitions/$slug'
     | '/profile/$username'
     | '/admin/contests/create'
+    | '/admin/notifications/create'
     | '/admin/profiles/$id'
     | '/competitions'
     | '/admin/contests'
+    | '/admin/notifications'
     | '/admin/profiles'
     | '/admin/users'
     | '/competitions/$slug/participants'
@@ -414,9 +435,11 @@ export interface FileRouteTypes {
     | '/voters'
     | '/profile/$username'
     | '/admin/contests/create'
+    | '/admin/notifications/create'
     | '/admin/profiles/$id'
     | '/competitions'
     | '/admin/contests'
+    | '/admin/notifications'
     | '/admin/profiles'
     | '/admin/users'
     | '/competitions/$slug/participants'
@@ -453,9 +476,11 @@ export interface FileRouteTypes {
     | '/_public/competitions/$slug'
     | '/_public/profile/$username'
     | '/admin/contests/create'
+    | '/admin/notifications/create'
     | '/admin/profiles/$id'
     | '/_public/competitions/'
     | '/admin/contests/'
+    | '/admin/notifications/'
     | '/admin/profiles/'
     | '/admin/users/'
     | '/_public/competitions/$slug/participants'
@@ -670,6 +695,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProfilesIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/notifications/': {
+      id: '/admin/notifications/'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AdminNotificationsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/contests/': {
       id: '/admin/contests/'
       path: '/contests'
@@ -689,6 +721,13 @@ declare module '@tanstack/react-router' {
       path: '/profiles/$id'
       fullPath: '/admin/profiles/$id'
       preLoaderRoute: typeof AdminProfilesIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/notifications/create': {
+      id: '/admin/notifications/create'
+      path: '/notifications/create'
+      fullPath: '/admin/notifications/create'
+      preLoaderRoute: typeof AdminNotificationsCreateRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/contests/create': {
@@ -809,8 +848,10 @@ interface AdminRouteChildren {
   AdminWinnersRoute: typeof AdminWinnersRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminContestsCreateRoute: typeof AdminContestsCreateRoute
+  AdminNotificationsCreateRoute: typeof AdminNotificationsCreateRoute
   AdminProfilesIdRoute: typeof AdminProfilesIdRoute
   AdminContestsIndexRoute: typeof AdminContestsIndexRoute
+  AdminNotificationsIndexRoute: typeof AdminNotificationsIndexRoute
   AdminProfilesIndexRoute: typeof AdminProfilesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminContestsIdEditRoute: typeof AdminContestsIdEditRoute
@@ -825,8 +866,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminWinnersRoute: AdminWinnersRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminContestsCreateRoute: AdminContestsCreateRoute,
+  AdminNotificationsCreateRoute: AdminNotificationsCreateRoute,
   AdminProfilesIdRoute: AdminProfilesIdRoute,
   AdminContestsIndexRoute: AdminContestsIndexRoute,
+  AdminNotificationsIndexRoute: AdminNotificationsIndexRoute,
   AdminProfilesIndexRoute: AdminProfilesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminContestsIdEditRoute: AdminContestsIdEditRoute,

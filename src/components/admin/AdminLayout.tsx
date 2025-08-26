@@ -5,6 +5,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminOnlyProtected } from "./AdminProtected";
+import { Bell } from "lucide-react";
 
 export function AdminLayout() {
   const location = useLocation();
@@ -22,6 +23,8 @@ export function AdminLayout() {
       "/admin/winners": "Winners",
       "/admin/profiles": "Profiles",
       "/admin/payments": "Payments",
+      "/admin/notifications": "Notifications",
+      "/admin/notifications/create": "Create Notification",
     };
     return pathMap[path] || "Admin Panel";
   };
@@ -48,6 +51,15 @@ export function AdminLayout() {
                       <BreadcrumbPage className="truncate">{getPageTitle(currentPath)}</BreadcrumbPage>
                     </BreadcrumbList>
                   </Breadcrumb>
+                </div>
+                <div className="flex items-center gap-2 px-4">
+                  <Link 
+                    to="/admin/notifications" 
+                    className="p-2 rounded-lg hover:bg-slate-100 transition-colors duration-200"
+                    title="Notifications"
+                  >
+                    <Bell className="h-5 w-5 text-slate-600" />
+                  </Link>
                 </div>
               </header>
               <div className="flex flex-col gap-4 p-4 pt-0 min-w-0 overflow-x-auto">

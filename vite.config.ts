@@ -13,6 +13,10 @@ export default defineConfig({
       // autoCodeSplitting: true,
     }),
     react()],
+  server: {
+    port: 3000, // Change this to any port you prefer
+    host: true,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

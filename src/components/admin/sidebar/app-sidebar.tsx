@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Bot, Command, Frame, LifeBuoy, Map, PieChart, Send, Settings2, SquareTerminal, User, CreditCard, Zap, Trophy } from "lucide-react";
+import { BookOpen, Bot, Command, Frame, LifeBuoy, Map, PieChart, Send, Settings2, SquareTerminal, User, CreditCard, Zap, Trophy, Bell } from "lucide-react";
 
 import { NavMain } from "@/components/admin/sidebar/nav-main";
 import { NavProjects } from "@/components/admin/sidebar/nav-projects";
@@ -66,6 +66,21 @@ const data = {
       title: "Leaderboard",
       url: "/admin/leaderboard",
       icon: Trophy,
+    },
+    {
+      title: "Notifications",
+      url: "/admin/notifications",
+      icon: Bell,
+      items: [
+        {
+          title: "All Notifications",
+          url: "/admin/notifications",
+        },
+        {
+          title: "Create Notification",
+          url: "/admin/notifications/create",
+        },
+      ],
     },
   ],
   navSecondary: [
